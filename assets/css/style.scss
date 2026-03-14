@@ -4,5 +4,25 @@
 @import "{{ site.theme }}";
 
 body {
-  background-color: #1e1e2e;
+  background-color: #fafafa;
+  color: #222222;
+}
+
+h1, h2, h3 {
+  color: #222222;
+}
+
+a {
+  color: #2563eb;
+}
+
+a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+header {
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
 }
