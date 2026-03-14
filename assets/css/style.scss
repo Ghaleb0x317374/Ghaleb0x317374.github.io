@@ -39,11 +39,11 @@ pre, code {
 }
 
 pre {
-  padding: 20px 24px!important;
-  line-height: 1.6!important;
-  overflow-x: auto!important;
-  margin: 16px 0!important;
+  outline: none!important;
+  box-shadow: none!important;
+  border: 1px solid #30363d!important;
 }
+
 
 code {
   padding: 3px 8px!important;
