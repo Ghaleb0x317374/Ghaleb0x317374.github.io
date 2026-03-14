@@ -57,3 +57,18 @@ pre > code {
   border-radius: 0!important;
 }
 
+
+pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 10px;
+}
+
+
