@@ -4,25 +4,29 @@
 @import "{{ site.theme }}";
 
 body {
-  background-color: #fafafa;
-  color: #222222;
+  background-color: #1a1a2e;
+  color: #e0e0e0;
 }
 
 h1, h2, h3 {
-  color: #222222;
+  color: #e0e0e0;
 }
 
 a {
-  color: #2563eb;
+  color: #7eb8f7;
 }
 
 a:hover {
-  color: #1d4ed8;
+  color: #a8d0ff;
   text-decoration: underline;
 }
 
 header {
-  border-bottom: 2px solid #e5e5e5;
+  border-bottom: 1px solid #333355;
   padding-bottom: 12px;
   margin-bottom: 24px;
+}
+
+li {
+  color: #cccccc;
 }
