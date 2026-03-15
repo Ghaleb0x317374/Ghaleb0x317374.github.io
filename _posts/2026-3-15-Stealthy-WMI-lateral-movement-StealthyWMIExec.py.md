@@ -253,7 +253,7 @@ I have published the script on GitHub: [StealthyWMIExec.py](https://github.com/G
 ![](/assets/images/StealthyWMIExec.png)
 
 ## new approach for lateral movement with impacket ?
-With this idea, we can rewrite it using RPCs not just WMI. The main concept is to avoid touching the disk at all when using an `*exec.py` tools like `smbexec.py` or `wmiexec.py`.
+With this idea, we can rewrite it using RPCs not just WMI. But the main concept is to avoid touching the disk at all when using an `*exec.py` tools like `smbexec.py` or `wmiexec.py`.
 
 This can be achieved by starting an SMB server that acts as both an exfiltration channel for results and a host for payloads, while utilizing LOLBins for execution.
 # resources
