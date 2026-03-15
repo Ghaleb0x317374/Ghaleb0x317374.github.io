@@ -50,7 +50,9 @@ And I got an error:
 So i did further research online and I found out the problem is occurred because the account can't access a smb share with Guest auth so we need to change value in registry and Allow Insecure Guest Auth by changing `AllowInsecureGuestAuth` value to `DWORD 1` in this key: `HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters`
 
 Now try to trigger the LolBin again: 
+
 ![](../assets/images/open-file-security-warning.png)
+
 and this popup stops the execution.
  
 So I found a thread in [superuser.com](https://superuser.com/questions/1863693/how-to-get-rid-of-open-file-security-warning-in-windows-11) and it says we  can white list file extensions and mark it as LowRiskFiles by creating a registry key `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Associations` with valueName: `LowRiskFileTypes` and ValueData: `.cmd`
